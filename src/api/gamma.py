@@ -1,6 +1,5 @@
-import json
 import requests
-
+import json
 from datetime import datetime, timezone
 
 from config import POLYMARKET_API, REQUEST_TIMEOUT
@@ -41,7 +40,9 @@ class GammaClient:
 
         response.raise_for_status()
 
-        return response.json()
+        data = response.json()
+
+        return data
 
     def find_active_btc_market(self):
 
@@ -71,6 +72,12 @@ class GammaClient:
 
             market = event["markets"][0]
 
+
+
+            print("\n========== RAW GAMMA MARKET ==========\n")
+            print(json.dumps(market, indent=2))
+            print("\n======================================\n")
+
             if market["closed"]:
 
                 continue
@@ -95,7 +102,47 @@ class GammaClient:
 
                 closed=market["closed"],
 
-                enable_orderbook=market["enableOrderBook"]
+                enable_orderbook=market["enableOrderBook"],
+
+                yes_price=float(
+                    json.loads(
+                        market["outcomePrices"]
+                    )[0]
+                ),
+
+                no_price=float(
+                    json.loads(
+                        market["outcomePrices"]
+                    )[1]
+                ),
+
+                best_bid=float(
+                    market.get("bestBid", 0)
+                ),
+
+                best_ask=float(
+                    market.get("bestAsk", 0)
+                ),
+
+                last_trade=float(
+                    market.get("lastTradePrice", 0)
+                ),
+
+                spread=float(
+                    market.get("spread", 0)
+                ),
+
+                liquidity=float(
+                    market.get("liquidity", 0)
+                ),
+
+                volume=float(
+                    market.get("volume", 0)
+                ),
+
+                one_hour_change=float(
+                    market.get("oneHourPriceChange", 0)
+                )
 
             )
 
