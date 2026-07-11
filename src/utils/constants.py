@@ -1,0 +1,15 @@
+APP_NAME = "Polymarket Edge"
+
+VERSION = "0.1.0"
+
+BUY = "BUY"
+
+SELL = "SELL"
+
+YES = "YES"
+
+NO = "NO"
+
+BTC_SYMBOL = "BTCUSDT"
+
+DEFAULT_POSITION_SIZE = 100
