@@ -1,5 +1,10 @@
 from dataclasses import dataclass
+from typing import List
 
+
+# ----------------------------------------------------
+# Market Model
+# ----------------------------------------------------
 
 @dataclass
 class Market:
@@ -15,3 +20,39 @@ class Market:
     closed: bool
 
     enable_orderbook: bool
+
+
+# ----------------------------------------------------
+# OrderBook Models
+# ----------------------------------------------------
+
+@dataclass
+class PriceLevel:
+
+    price: float
+
+    size: float
+
+
+@dataclass
+class OrderBook:
+
+    token_id: str
+
+    best_bid: float
+
+    best_ask: float
+
+    mid_price: float
+
+    spread: float
+
+    bid_volume: float
+
+    ask_volume: float
+
+    imbalance: float
+
+    bids: List[PriceLevel]
+
+    asks: List[PriceLevel]

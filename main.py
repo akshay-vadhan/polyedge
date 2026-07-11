@@ -1,25 +1,23 @@
-from src.api.gamma import GammaClient
-from src.api.clob import ClobClient
+from src.utils.logger import logger
 
-gamma = GammaClient()
-clob = ClobClient()
+from src.database.database import Database
 
-market = gamma.find_active_btc_market()
 
-print("\nBTC MARKET")
-print("--------------------------")
-print(market)
+def main():
 
-print("\nUP ORDERBOOK")
-print("--------------------------")
+    logger.info("Starting Polymarket Edge...")
 
-up = clob.get_best_bid_ask(market.up_token)
+    db = Database()
 
-print(up)
+    logger.success("Database Connected")
 
-print("\nDOWN ORDERBOOK")
-print("--------------------------")
+    logger.success("Tables Created")
 
-down = clob.get_best_bid_ask(market.down_token)
+    db.close()
 
-print(down)
+    logger.success("Ready")
+
+
+if __name__ == "__main__":
+
+    main()

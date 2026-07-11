@@ -4,6 +4,12 @@ from pathlib import Path
 
 from config import DATABASE_PATH
 
+from src.database.schema import (
+    MARKETS_TABLE,
+    MARKET_TICKS_TABLE,
+    PAPER_TRADES_TABLE
+)
+
 
 class Database:
 
@@ -14,6 +20,18 @@ class Database:
         self.conn = sqlite3.connect(DATABASE_PATH)
 
         self.cursor = self.conn.cursor()
+
+        self.create_tables()
+
+    def create_tables(self):
+
+        self.cursor.execute(MARKETS_TABLE)
+
+        self.cursor.execute(MARKET_TICKS_TABLE)
+
+        self.cursor.execute(PAPER_TRADES_TABLE)
+
+        self.conn.commit()
 
     def execute(self, query, values=()):
 

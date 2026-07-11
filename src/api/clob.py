@@ -1,12 +1,7 @@
-"""
-Polymarket CLOB API Client
-"""
-
-from __future__ import annotations
-
 import requests
 
 from config import REQUEST_TIMEOUT
+from src.api.models import OrderBook, PriceLevel
 from src.utils.logger import logger
 
 
@@ -15,48 +10,87 @@ class ClobClient:
     BASE_URL = "https://clob.polymarket.com"
 
     def __init__(self):
+
         self.session = requests.Session()
 
-    def get_orderbook(self, token_id: str):
+    def get_orderbook(self, token_id):
 
         url = f"{self.BASE_URL}/book"
 
-        params = {
-            "token_id": token_id
-        }
+        response = self.session.get(
+            url,
+            params={
+                "token_id": token_id
+            },
+            timeout=REQUEST_TIMEOUT
+        )
 
-        try:
+        response.raise_for_status()
 
-            response = self.session.get(
-                url,
-                params=params,
-                timeout=REQUEST_TIMEOUT
+        data = response.json()
+
+        bids = [
+            PriceLevel(
+                float(x["price"]),
+                float(x["size"])
+            )
+            for x in data.get("bids", [])
+        ]
+
+        asks = [
+            PriceLevel(
+                float(x["price"]),
+                float(x["size"])
+            )
+            for x in data.get("asks", [])
+        ]
+
+        best_bid = bids[0].price if bids else 0
+
+        best_ask = asks[0].price if asks else 0
+
+        spread = best_ask - best_bid
+
+        mid = (
+            (best_bid + best_ask) / 2
+            if best_bid and best_ask
+            else 0
+        )
+
+        bid_volume = sum(x.size for x in bids)
+
+        ask_volume = sum(x.size for x in asks)
+
+        imbalance = 0
+
+        if (bid_volume + ask_volume) > 0:
+
+            imbalance = (
+                bid_volume - ask_volume
+            ) / (
+                bid_volume + ask_volume
             )
 
-            response.raise_for_status()
+        return OrderBook(
 
-            return response.json()
+            token_id=token_id,
 
-        except requests.RequestException as e:
+            best_bid=best_bid,
 
-            logger.error(f"CLOB Error : {e}")
+            best_ask=best_ask,
 
-            return None
+            mid_price=mid,
 
-    def get_best_bid_ask(self, token_id: str):
+            spread=spread,
 
-        book = self.get_orderbook(token_id)
+            bid_volume=bid_volume,
 
-        if not book:
-            return None
+            ask_volume=ask_volume,
 
-        bids = book.get("bids", [])
-        asks = book.get("asks", [])
+            imbalance=imbalance,
 
-        best_bid = bids[0] if bids else None
-        best_ask = asks[0] if asks else None
+            bids=bids,
 
-        return {
-            "bid": best_bid,
-            "ask": best_ask
-        }
+            asks=asks
+
+        )
