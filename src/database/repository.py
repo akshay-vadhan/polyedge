@@ -191,11 +191,7 @@ class Repository:
 
             FROM paper_trades
 
-            WHERE
-
-                market_slug=?
-
-                AND status='OPEN'
+            WHERE market_slug=?
 
             """,
 

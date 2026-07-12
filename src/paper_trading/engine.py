@@ -32,7 +32,11 @@ class PaperTradingEngine:
 
         if self.repo.trade_exists(signal.market_slug):
 
-            logger.info("Trade already exists")
+            logger.info(
+
+                f"Trade already exists for {signal.market_slug}"
+
+            )
 
             return None
 

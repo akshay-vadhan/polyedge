@@ -1,5 +1,7 @@
 import time
-
+import traceback
+from src.database.database import Database
+from src.database.repository import Repository
 from src.collectors.market_collector import MarketCollector
 from src.paper_trading.engine import PaperTradingEngine
 from src.paper_trading.trade_manager import TradeManager
@@ -16,25 +18,85 @@ class TradingBot:
 
         self.manager = TradeManager()
 
+        self.db = Database()
+
+        self.repo = Repository(self.db)
+
     def run(self):
 
-        logger.success("Bot Started")
+        logger.success("=" * 60)
+        logger.success("POLYMARKET EDGE BOT STARTED")
+        logger.success("=" * 60)
 
-        while True:
+        cycle = 0
 
-            try:
+        try:
 
-                self.collector.collect()
+            while True:
 
-                self.paper.create_trade()
+                cycle += 1
 
-                self.manager.process()
+                logger.info(f"Cycle #{cycle}")
 
-            except Exception as e:
+                start = time.time()
 
-                logger.error(str(e))
+                try:
 
-            time.sleep(1)
+                    tick = self.collector.collect()
+
+                    if tick is None:
+
+                        time.sleep(1)
+
+                        continue
+
+                    # ---------------------------------
+                    # Save Tick
+                    # ---------------------------------
+
+                    self.repo.insert_market_tick(tick)
+
+                    logger.success("Tick Saved")
+
+                    # ---------------------------------
+                    # Generate Signal
+                    # ---------------------------------
+
+                    trade = self.paper.create_trade()
+
+                    if trade:
+
+                        logger.success(
+
+                            f"New Trade : {trade['side']} @ {trade['entry_price']}"
+
+                        )
+
+                    # ---------------------------------
+                    # Manage Trades
+                    # ---------------------------------
+
+                    self.manager.process()
+
+                except Exception:
+
+                    logger.error(traceback.format_exc())
+
+                    logger.info("Bot recovered")
+
+                logger.info(
+
+                    f"Cycle Time : {round(time.time()-start,2)} sec"
+
+                )
+
+                time.sleep(1)
+
+        except KeyboardInterrupt:
+
+            logger.success("=" * 60)
+            logger.success("BOT STOPPED")
+            logger.success("=" * 60)
 
 
 if __name__ == "__main__":

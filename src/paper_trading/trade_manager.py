@@ -42,6 +42,8 @@ class TradeManager:
 
             )
 
+            
+
             if winner is None:
 
                 print(
