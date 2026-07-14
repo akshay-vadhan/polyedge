@@ -100,6 +100,17 @@ class GammaClient:
 
                 down_token=tokens[1],
 
+                # NEW
+                tick_size=str(market["orderPriceMinTickSize"]),
+
+                neg_risk=market["negRisk"],
+
+                min_order_size=float(market["orderMinSize"]),
+
+                end_time=market["endDate"],
+
+                accepting_orders=market["acceptingOrders"],
+
                 closed=market["closed"],
 
                 enable_orderbook=market["enableOrderBook"],

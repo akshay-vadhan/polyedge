@@ -47,8 +47,15 @@ class Market:
     up_token: str
     down_token: str
 
+    tick_size: str
+    neg_risk: bool
+    min_order_size: float
+    end_time: str
+    accepting_orders: bool
+
     closed: bool
     enable_orderbook: bool
+
 
     # Gamma Data
 

@@ -28,6 +28,6 @@ def render_trade_history(df):
 
         df,
 
-        use_container_width=True
+        width="stretch"
 
     )

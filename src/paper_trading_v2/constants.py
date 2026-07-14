@@ -1,0 +1,13 @@
+"""
+Paper Trading V2 Configuration
+"""
+
+INITIAL_BALANCE = 100.0
+
+DEFAULT_TRADE_SIZE = 10.0
+
+MAX_OPEN_POSITIONS = 1
+
+MIN_TRADE_SIZE = 1.0
+
+MAX_TRADE_SIZE = 100.0
