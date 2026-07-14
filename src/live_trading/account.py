@@ -16,13 +16,21 @@ class LiveAccount:
 
         params = BalanceAllowanceParams(
 
-            asset_type=AssetType.COLLATERAL,
-
-            signature_type=0
+            asset_type=AssetType.COLLATERAL
 
         )
 
-        return self.client.get_balance_allowance(params)
+        self.client.update_balance_allowance(params)
+
+        balance = self.client.get_balance_allowance(params)
+
+        return {
+
+            "balance": float(balance["balance"]) / 1_000_000,
+
+            "allowances": balance["allowances"]
+
+        }
 
     def print_info(self):
 

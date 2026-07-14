@@ -103,3 +103,42 @@ CREATE TABLE IF NOT EXISTS paper_trades(
 
 );
 """
+
+
+LIVE_TRADES_TABLE = """
+CREATE TABLE IF NOT EXISTS live_trades(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    order_id TEXT UNIQUE,
+
+    market_slug TEXT,
+
+    token_id TEXT,
+
+    side TEXT,
+
+    shares REAL,
+
+    entry_price REAL,
+
+    fill_price REAL,
+
+    exit_price REAL,
+
+    usd_amount REAL,
+
+    pnl REAL,
+
+    roi REAL,
+
+    status TEXT,
+
+    created_at TEXT,
+
+    filled_at TEXT,
+
+    closed_at TEXT
+
+);
+"""

@@ -7,7 +7,8 @@ from config import DATABASE_PATH
 from src.database.schema import (
     MARKETS_TABLE,
     MARKET_TICKS_TABLE,
-    PAPER_TRADES_TABLE
+    PAPER_TRADES_TABLE,
+    LIVE_TRADES_TABLE
 )
 
 
@@ -30,6 +31,8 @@ class Database:
         self.cursor.execute(MARKET_TICKS_TABLE)
 
         self.cursor.execute(PAPER_TRADES_TABLE)
+
+        self.cursor.execute(LIVE_TRADES_TABLE)
 
         self.conn.commit()
 

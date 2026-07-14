@@ -1,4 +1,7 @@
-from py_clob_client.order_builder.builder import OrderBuilder
+from py_clob_client.clob_types import (
+    OrderArgs,
+    CreateOrderOptions
+)
 
 from src.live_trading.client import LiveClient
 
@@ -21,11 +24,15 @@ class LiveOrderBuilder:
 
         price,
 
-        size
+        size,
+
+        tick_size,
+
+        neg_risk
 
     ):
 
-        return self.builder.create_order(
+        order = OrderArgs(
 
             token_id=token_id,
 
@@ -34,6 +41,22 @@ class LiveOrderBuilder:
             size=size,
 
             side="BUY"
+
+        )
+
+        options = CreateOrderOptions(
+
+            tick_size=tick_size,
+
+            neg_risk=neg_risk
+
+        )
+
+        return self.builder.create_order(
+
+            order,
+
+            options
 
         )
 
@@ -45,11 +68,15 @@ class LiveOrderBuilder:
 
         price,
 
-        size
+        size,
+
+        tick_size,
+
+        neg_risk
 
     ):
 
-        return self.builder.create_order(
+        order = OrderArgs(
 
             token_id=token_id,
 
@@ -61,6 +88,22 @@ class LiveOrderBuilder:
 
         )
 
+        options = CreateOrderOptions(
+
+            tick_size=tick_size,
+
+            neg_risk=neg_risk
+
+        )
+
+        return self.builder.create_order(
+
+            order,
+
+            options
+
+        )
+
     def build_sell(
 
         self,
@@ -69,11 +112,15 @@ class LiveOrderBuilder:
 
         price,
 
-        size
+        size,
+
+        tick_size,
+
+        neg_risk
 
     ):
 
-        return self.builder.create_order(
+        order = OrderArgs(
 
             token_id=token_id,
 
@@ -82,5 +129,21 @@ class LiveOrderBuilder:
             size=size,
 
             side="SELL"
+
+        )
+
+        options = CreateOrderOptions(
+
+            tick_size=tick_size,
+
+            neg_risk=neg_risk
+
+        )
+
+        return self.builder.create_order(
+
+            order,
+
+            options
 
         )

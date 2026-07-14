@@ -1,4 +1,6 @@
+
 from src.live_trading.client import LiveClient
+from src.utils.logger import logger
 from src.live_trading.account import LiveAccount
 from src.live_trading.order_builder import LiveOrderBuilder
 from src.api.exceptions import (
@@ -135,20 +137,36 @@ class LiveExecutor:
 
         print()
 
-        signed = self.builder.build(
+        if side.upper() == "YES":
 
-            token_id=token,
+            signed = self.builder.build_buy_yes(
 
-            side="BUY",
+                token_id=token,
 
-            price=price,
+                price=price,
 
-            size=shares,
+                size=shares,
 
-            tick_size=market.tick_size,
+                tick_size=market.tick_size,
 
-            neg_risk=market.neg_risk
+                neg_risk=market.neg_risk
 
-        )
+            )
+
+        else:
+
+            signed = self.builder.build_buy_no(
+
+                token_id=token,
+
+                price=price,
+
+                size=shares,
+
+                tick_size=market.tick_size,
+
+                neg_risk=market.neg_risk
+
+            )
 
         return signed

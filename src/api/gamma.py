@@ -44,6 +44,21 @@ class GammaClient:
 
         return data
 
+    def get_event_by_slug(self, slug):
+
+        logger.info(f"Fetching {slug}")
+
+        try:
+            events = self._request(slug)
+
+        except requests.RequestException as e:
+            raise GammaAPIError(str(e))
+
+        if not events:
+            raise MarketNotFound(f"{slug} not found.")
+
+        return events[0]
+
     def find_active_btc_market(self):
 
         for ts in self._bucket_timestamps():

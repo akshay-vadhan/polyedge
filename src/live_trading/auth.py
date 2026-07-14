@@ -17,9 +17,9 @@ class LiveAuthenticator:
 
             key=PRIVATE_KEY,
 
-            signature_type=0,
+            signature_type=SIGNATURE_TYPE,
 
-            funder=WALLET_ADDRESS
+            funder=FUNDER_ADDRESS
 
         )
 

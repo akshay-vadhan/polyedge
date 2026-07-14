@@ -6,7 +6,8 @@ from src.collectors.market_collector import MarketCollector
 from src.paper_trading.engine import PaperTradingEngine
 from src.paper_trading.trade_manager import TradeManager
 from src.utils.logger import logger
-
+from src.live_trading.live_engine import LiveTradeEngine
+from src.live_trading.config import LIVE_TRADING
 
 class TradingBot:
 
@@ -21,6 +22,8 @@ class TradingBot:
         self.db = Database()
 
         self.repo = Repository(self.db)
+
+        self.live = LiveTradeEngine()
 
     def run(self):
 
@@ -69,6 +72,22 @@ class TradingBot:
                         logger.success(
 
                             f"New Trade : {trade['side']} @ {trade['entry_price']}"
+
+                        )
+
+                    if trade and LIVE_TRADING:
+
+                        logger.info(
+
+                            "Sending trade to Live Engine"
+
+                        )
+
+                        self.live.execute_signal(
+
+                            self.collector.market,
+
+                            trade["side"]
 
                         )
 
